@@ -1,0 +1,95 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Fuggles&family=Poppins:wght@300;400&display=swap');
+
+/* Styling */
+
+body {
+    font-family: 'Fuggles', cursive !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.heading {
+    color: #646681;
+    font-weight: 700 !important;
+    font-size: 2rem;
+    text-align: center;
+    margin: 2rem auto 1.5rem;
+    text-transform: uppercase;
+}
+
+.main-sec {
+    max-width: 50%;
+    margin: 0 auto;
+}
+
+.btn-sec {
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-btn {
+    background-color: #646ff0;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    /* display: inline-block; */
+    /* font-size: 1.6rem; */
+    font-weight: 600;
+    /* height: auto; */
+    /* overflow: hidden; */
+    padding: 0.6rem 1.5rem;
+    /* text-decoration: none; */
+    text-transform: capitalize;
+}
+
+.button_button__RygOL {
+    background-color: #cccdde;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0.8rem;
+    text-transform: capitalize;
+    color: #585858;
+    width: 150px;
+}
+
+.main-todo-sec {
+    background-color: #ecedf6;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.no-todo {
+    width: 100%;
+    text-align: center;
+}
+
+.no-todo p {
+    display: inline-block;
+    width: 133px;
+    background-color: #dedfe1;
+    padding: 6px;
+    border-radius: 10px;
+    text-transform: capitalize;
+    font-weight: 500;
+    color: #585858;
+}
+
+.todo-sec {
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    /* justify-content: space-between; */
+}
+
+
+.todo-sec .left-side {
+    flex: 5;
+}
+
+.todo-sec .right-side {
+    flex: 1;
+}
