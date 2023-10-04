@@ -1,10 +1,7 @@
 // https://dev.to/shaifarfan08/a-complete-react-todo-app-using-react-redux-framer-motion-2hk0
 
 import React from 'react'
-// import Chuchu from '../download/dld';
 const Todo = () => {
-
-
   return (
     <div>
       <p className='heading'>Todo list</p>
@@ -28,13 +25,7 @@ const Todo = () => {
           <div className='todo-sec'>
             <div className='left-side'>
               <div>
-                <div class="container">
-                  <input type="checkbox" />
-                  <span class="checkmark"></span>
-                </div>
-                <div>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore veniam porro a recusandae illo. Accusamus voluptatibus suscipit quod blanditiis similique. Necessitatibus deserunt magni molestiae voluptatem facere recusandae reprehenderit ea. Quam?</p>
-                </div>
+                <input type="checkbox" />
               </div>
             </div>
             <div className='right-side'>
@@ -43,7 +34,7 @@ const Todo = () => {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 
 
