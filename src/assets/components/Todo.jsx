@@ -1,6 +1,6 @@
 // https://dev.to/shaifarfan08/a-complete-react-todo-app-using-react-redux-framer-motion-2hk0
 
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -18,10 +18,67 @@ import {
 } from '@chakra-ui/react'
 
 const Todo = () => {
-  // Modal
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  // Add Modal
+  const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure()
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
+
+  // Edit Modal
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
+  // Add Todo
+  const [inpVal, setInpVal] = useState("");
+  const [selectVal, setSelectVal] = useState("incomplete");
+  const [todoList, setTodoList] = useState([]);
+  const addTodo = () => {
+    // Structure
+    const obj = {
+      todo: inpVal,
+      status: selectVal,
+      time: new Date().toLocaleString(),
+    }
+    if (!inpVal) {
+      alert("Enter Todo First!")
+    } else {
+      setTodoList(prev => [...prev, obj])
+      setInpVal("")
+      onAddClose();
+    }
+  }
+  // Filter
+  const selectChange = (val) => {
+    console.log(val)
+  }
+
+  // Delete
+  const deleteTodo = (index) => {
+    // console.log(index);
+    var deletedArr = todoList.filter((e, i) => i !== index);
+    setTodoList(deletedArr)
+  }
+
+  // Edit
+
+  // const [editObj, setEditObj] = useState({});
+  const [defEditVal, setDefEditVal] = useState([]);
+  const [editIndex, setEditIndex] = useState('');
+
+  const isEditFunc = (val, i) => {
+    onEditOpen();
+    setDefEditVal(val)
+    setEditIndex(i);
+  }
+  // console.log(editIndex)
+  // console.log(editValidation, defEditVal.todo)
+  const editTodo = () => {
+    // console.log(defEditVal, index)
+    let newArr = [...todoList];
+    newArr[editIndex] = defEditVal;
+    setTodoList([...newArr])
+    onEditClose();
+    console.log(index)
+    // console.log(todoList)
+    // console.log(newArr[2].todo = "abc")
+  }
 
   return (
     <div>
@@ -29,12 +86,12 @@ const Todo = () => {
       <div className='main-sec'>
         <div className='btn-sec'>
           <div>
-            <button onClick={onOpen} className='add-btn'>add task</button>
+            <button onClick={onAddOpen} className='add-btn'>add task</button>
             <Modal
               initialFocusRef={initialRef}
               finalFocusRef={finalRef}
-              isOpen={isOpen}
-              onClose={onClose}
+              isOpen={isAddOpen}
+              onClose={onAddClose}
             >
               <ModalOverlay />
               <ModalContent>
@@ -43,12 +100,12 @@ const Todo = () => {
                 <ModalBody pb={6}>
                   <FormControl>
                     <FormLabel>Title</FormLabel>
-                    <Input ref={initialRef} placeholder='abc..' />
+                    <Input ref={initialRef} value={inpVal} onChange={(e) => setInpVal(e.target.value)} placeholder='abc..' />
                   </FormControl>
 
                   <FormControl mt={4}>
                     <FormLabel>Status</FormLabel>
-                    <Select>
+                    <Select onChange={(e) => setSelectVal(e.target.value)}>
                       <option value='incomplete'>Incomplete</option>
                       <option value='complete'>Complete</option>
                     </Select>
@@ -56,16 +113,16 @@ const Todo = () => {
                 </ModalBody>
 
                 <ModalFooter>
-                  <Button colorScheme='blue' mr={3}>
+                  <Button onClick={addTodo} colorScheme='blue' mr={3}>
                     Save
                   </Button>
-                  <Button onClick={onClose}>Cancel</Button>
+                  <Button onClick={onAddClose}>Cancel</Button>
                 </ModalFooter>
               </ModalContent>
             </Modal>
           </div>
           <div>
-            <select className='button_button__RygOL button_button__select__r3jlh' id="">
+            <select onChange={e => selectChange(e.target.value)} className='button_button__RygOL button_button__select__r3jlh' id="">
               <option value="all">All</option>
               <option value="incomplete">Incomplete</option>
               <option value="complete">Complete</option>
@@ -73,75 +130,79 @@ const Todo = () => {
           </div>
         </div>
         <div className='main-todo-sec'>
-          {/* <div className='no-todo'>
-            <p>no todo found</p>
-          </div> */}
-          <div className='todo-sec'>
-            <div className='left-side'>
-              <div>
-                <label class="container">
-                  One
-                  <br />
-                  <p>
-                    1:34 AM, 10/05/2023
-                  </p>
-                  <input type="checkbox" />
-                  <span class="checkmark"></span>
-                </label>
+          {todoList && Array.isArray(todoList) && todoList.length > 0 ?
+            (
+              todoList.map((e, i) => {
+                return (
+                  <div className='todo-sec' key={i}>
+                    <div className='left-side'>
+                      <div>
+                        <label class="container">
+                          {e.todo}
+                          <br />
+                          <p>
+                            {e.time}
+                          </p>
+                          <input type="checkbox" checked={e.status === "incomplete" ? false : true} />
+                          <span class="checkmark"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div className='right-side'>
+                      <div style={{ display: 'flex', gap: '10px', marginTop: 15 }}>
+                        {/* Edit Modal */}
+                        <Modal
+                          initialFocusRef={initialRef}
+                          finalFocusRef={finalRef}
+                          isOpen={isEditOpen}
+                          onClose={onEditClose}
+                        >
+                          <ModalOverlay />
+                          <ModalContent>
+                            <ModalHeader>Add Todo</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody pb={6}>
+                              <FormControl>
+                                <FormLabel>Title</FormLabel>
+                                <Input ref={initialRef} onChange={(e) => setDefEditVal({ ...defEditVal, todo: e.target.value })} defaultValue={defEditVal.todo} placeholder='abc..' />
+                              </FormControl>
+
+                              <FormControl mt={4}>
+                                <FormLabel>Status</FormLabel>
+                                <Select onChange={(e) => setDefEditVal({ ...defEditVal, status: e.target.value })}>
+                                  <option selected={defEditVal.status === "incomplete" ? true : false} value='incomplete'>Incomplete</option>
+                                  <option selected={defEditVal.status === "complete" ? true : false} value='complete'>Complete</option>
+                                </Select>
+                              </FormControl>
+                            </ModalBody>
+
+                            <ModalFooter>
+                              <Button colorScheme='blue' mr={3} onClick={editTodo}>
+                                Save
+                              </Button>
+                              <Button onClick={onEditClose}>Cancel</Button>
+                            </ModalFooter>
+                          </ModalContent>
+                        </Modal>
+                        <p onClick={() => deleteTodo(i)} className='icons'><i class="fa-solid fa-trash"></i></p>
+                        <p onClick={() => isEditFunc(e, i)} className='icons'><i class="fa-solid fa-pen"></i></p>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })
+            )
+            :
+            (
+              <div className='no-todo'>
+                <p>no todo found</p>
               </div>
-            </div>
-            <div className='right-side'>
-              <div style={{ display: 'flex', gap: '10px', marginTop: 15 }}>
-                <p className='icons'><i class="fa-solid fa-trash"></i></p>
-                <p className='icons'><i class="fa-solid fa-pen"></i></p>
-              </div>
-            </div>
-          </div>
-          <div className='todo-sec'>
-            <div className='left-side'>
-              <div>
-                <label class="container">
-                  One
-                  <br />
-                  <p>
-                    1:34 AM, 10/05/2023
-                  </p>
-                  <input type="checkbox" />
-                  <span class="checkmark"></span>
-                </label>
-              </div>
-            </div>
-            <div className='right-side'>
-              <div style={{ display: 'flex', gap: '10px', marginTop: 15 }}>
-                <p className='icons'><i class="fa-solid fa-trash"></i></p>
-                <p className='icons'><i class="fa-solid fa-pen"></i></p>
-              </div>
-            </div>
-          </div>
-          <div className='todo-sec'>
-            <div className='left-side'>
-              <div>
-                <label class="container">
-                  One
-                  <br />
-                  <p>
-                    1:34 AM, 10/05/2023
-                  </p>
-                  <input type="checkbox" />
-                  <span class="checkmark"></span>
-                </label>
-              </div>
-            </div>
-            <div className='right-side'>
-              <div style={{ display: 'flex', gap: '10px', marginTop: 15 }}>
-                <p className='icons'><i class="fa-solid fa-trash"></i></p>
-                <p className='icons'><i class="fa-solid fa-pen"></i></p>
-              </div>
-            </div>
-          </div>
+
+            )
+          }
         </div>
       </div>
-    </div>
+    </div >
   );
 
 
